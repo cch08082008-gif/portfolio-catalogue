@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON — Product Catalogue</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --beige-50: #FAF7F2;
+    --beige-100: #F2EDE3;
+    --beige-200: #E8DFD0;
+    --beige-300: #D9CCBA;
+    --beige-400: #BFB09A;
+    --beige-500: #9E8E76;
+    --brown-600: #6B5744;
+    --brown-700: #4A3C2E;
+    --brown-800: #2E2418;
+    --text-primary: #2E2418;
+    --text-secondary: #6B5744;
+    --text-muted: #9E8E76;
+    --border: #D9CCBA;
+    --border-light: #E8DFD0;
+    --bg: #FAF7F2;
+    --bg-card: #FFFFFF;
+    --bg-surface: #F2EDE3;
+    --accent: #6B5744;
+    --accent-light: #E8DFD0;
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Nav */
+  nav {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: normal;
+    letter-spacing: 0.25em;
+    color: var(--brown-800);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .logo span { color: var(--beige-400); }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--brown-800); }
+  .nav-contact-btn {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--brown-700);
+    color: var(--beige-100);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+  .nav-contact-btn:hover { background: var(--brown-800); }
+
+  /* Hero */
+  .hero {
+    background: var(--beige-100);
+    border-bottom: 1px solid var(--border);
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: normal;
+    color: var(--brown-800);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+  .hero p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 480px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  /* Search bar */
+  .search-bar {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    border: 1px solid var(--border);
+    background: white;
+  }
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px 16px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    background: transparent;
+    color: var(--text-primary);
+  }
+  .search-bar input::placeholder { color: var(--text-muted); }
+  .search-bar button {
+    background: var(--brown-600);
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: white;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .search-bar button:hover { background: var(--brown-800); }
+
+  /* Main layout */
+  .main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  /* Sidebar */
+  .sidebar { position: sticky; top: 80px; }
+  .sidebar-section { margin-bottom: 2rem; }
+  .sidebar-title {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .cat-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 8px 0;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid transparent;
+    transition: color 0.15s;
+  }
+  .cat-btn:hover { color: var(--brown-800); }
+  .cat-btn.active {
+    color: var(--brown-700);
+    font-weight: 500;
+    border-bottom-color: var(--brown-600);
+  }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .filter-label input[type="checkbox"] {
+    accent-color: var(--brown-600);
+    width: 14px;
+    height: 14px;
+  }
+  .price-range { display: flex; flex-direction: column; gap: 8px; }
+  .price-range input[type="range"] {
+    width: 100%;
+    accent-color: var(--brown-600);
+  }
+  .price-display {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  /* Product grid */
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .grid-count {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .sort-select {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-secondary);
+    padding: 6px 10px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    overflow: hidden;
+  }
+  .product-card:hover { border-color: var(--beige-400); }
+  .product-card.hidden { display: none; }
+
+  .product-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--beige-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .product-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .product-img svg { opacity: 0.35; }
+  .product-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: var(--brown-600);
+    color: var(--beige-100);
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+  }
+  .product-info { padding: 14px 16px 16px; }
+  .product-category {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .product-name {
+    font-size: 15px;
+    color: var(--brown-800);
+    margin-bottom: 4px;
+    font-weight: normal;
+  }
+  .product-desc {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .product-price {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--brown-700);
+  }
+  .inquire-btn {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .inquire-btn:hover {
+    background: var(--brown-700);
+    border-color: var(--brown-700);
+    color: white;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(46, 36, 24, 0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg);
+    max-width: 520px;
+    width: 100%;
+    padding: 2.5rem;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--brown-800); }
+  .modal-eyebrow {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+  .modal h2 {
+    font-size: 24px;
+    font-weight: normal;
+    color: var(--brown-800);
+    margin-bottom: 1.5rem;
+  }
+  .form-group { margin-bottom: 1.25rem; }
+  .form-group label {
+    display: block;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: white;
+    padding: 10px 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--brown-600); }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .submit-btn {
+    width: 100%;
+    background: var(--brown-700);
+    color: var(--beige-100);
+    border: none;
+    padding: 14px;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  .submit-btn:hover { background: var(--brown-800); }
+
+  /* Footer */
+  footer {
+    background: var(--brown-800);
+    color: var(--beige-300);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    margin-top: 4rem;
+  }
+  footer .footer-logo {
+    font-size: 20px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    color: var(--beige-100);
+  }
+  footer p {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    color: var(--beige-400);
+    letter-spacing: 0.05em;
+  }
+
+  /* No results */
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+  }
+
+  @media (max-width: 768px) {
+    .main-wrapper { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .nav-links { display: none; }
+    .hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#">MAISON <span>&middot;</span> ÉLISE</a>
+    <ul class="nav-links">
+      <li><a href="#">Collection</a></li>
+      <li><a href="#">Lookbook</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <button class="nav-contact-btn" onclick="openInquiry(null)">Enquire Now</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">SS 2025 Collection</p>
+  <h1>Browse Our Collection</h1>
+  <p>Discover timeless pieces crafted with natural fabrics and quiet elegance. Available for wholesale and retail enquiries.</p>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search products..." oninput="filterProducts()" />
+    <button onclick="filterProducts()">Search</button>
+  </div>
+</section>
+
+<div class="main-wrapper">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-title">Categories</p>
+      <button class="cat-btn active" onclick="setCategory('all', this)">All pieces</button>
+      <button class="cat-btn" onclick="setCategory('tops', this)">Tops &amp; blouses</button>
+      <button class="cat-btn" onclick="setCategory('dresses', this)">Dresses</button>
+      <button class="cat-btn" onclick="setCategory('bottoms', this)">Bottoms</button>
+      <button class="cat-btn" onclick="setCategory('outerwear', this)">Outerwear</button>
+      <button class="cat-btn" onclick="setCategory('accessories', this)">Accessories</button>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-title">Materials</p>
+      <div class="filter-group">
+        <label class="filter-label"><input type="checkbox" value="linen" onchange="filterProducts()"> Linen</label>
+        <label class="filter-label"><input type="checkbox" value="cotton" onchange="filterProducts()"> Organic cotton</label>
+        <label class="filter-label"><input type="checkbox" value="silk" onchange="filterProducts()"> Silk</label>
+        <label class="filter-label"><input type="checkbox" value="wool" onchange="filterProducts()"> Wool</label>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-title">Price range (MYR)</p>
+      <div class="price-range">
+        <input type="range" id="priceRange" min="50" max="1200" value="1200" step="50" oninput="updatePrice(this.value); filterProducts()">
+        <p class="price-display">Up to <strong id="priceDisplay">MYR 1,200</strong></p>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="grid-header">
+      <span class="grid-count" id="gridCount">12 pieces</span>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option value="default">Sort: Featured</option>
+        <option value="price-asc">Price: Low to high</option>
+        <option value="price-desc">Price: High to low</option>
+        <option value="name">Name: A–Z</option>
+      </select>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeInquiry()">&times;</button>
+    <p class="modal-eyebrow">Product enquiry</p>
+    <h2 id="modalTitle">Get in touch</h2>
+    <div class="form-group">
+      <label>Your name</label>
+      <input type="text" placeholder="e.g. Aishah Binti Rahman">
+    </div>
+    <div class="form-group">
+      <label>Email address</label>
+      <input type="email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Product interest</label>
+      <input type="text" id="modalProduct" placeholder="Product name">
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea placeholder="Tell us about your order quantity, sizing needs, or any questions..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="submitInquiry()">Send enquiry</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">MAISON · ÉLISE</div>
+  <p>Kuala Lumpur, Malaysia &nbsp;&middot;&nbsp; hello@maisonelise.com &nbsp;&middot;&nbsp; +60 12 345 6789</p>
+</footer>
+
+<script>
+const products = [
+  { id:1, name:"Linen wrap blouse", category:"tops", material:"linen", price:289, tag:"New", desc:"Relaxed fit, natural drape. Available in ecru &amp; sage.", color:"#D9CCBA" },
+  { id:2, name:"Midi linen dress", category:"dresses", material:"linen", price:459, tag:"Bestseller", desc:"Effortless silhouette with subtle tie waist.", color:"#E8DFD0" },
+  { id:3, name:"Wide-leg trousers", category:"bottoms", material:"cotton", price:329, tag:"", desc:"Organic cotton. High-rise, flowing cut.", color:"#BFB09A" },
+  { id:4, name:"Silk camisole", category:"tops", material:"silk", price:245, tag:"New", desc:"Lightweight pure silk, adjustable straps.", color:"#F2EDE3" },
+  { id:5, name:"Linen trench coat", category:"outerwear", material:"linen", price:899, tag:"", desc:"Structured yet breathable. Spring essential.", color:"#D9CCBA" },
+  { id:6, name:"Smock maxi dress", category:"dresses", material:"cotton", price:519, tag:"New", desc:"100% organic cotton with smocked bodice.", color:"#E8DFD0" },
+  { id:7, name:"Wool blend coat", category:"outerwear", material:"wool", price:1150, tag:"Limited", desc:"Warm-tone herringbone. Double breasted.", color:"#BFB09A" },
+  { id:8, name:"Linen midi skirt", category:"bottoms", material:"linen", price:269, tag:"", desc:"A-line silhouette, side pockets.", color:"#FAF7F2" },
+  { id:9, name:"Silk wrap skirt", category:"bottoms", material:"silk", price:389, tag:"New", desc:"Printed botanical motif. Wrap tie closure.", color:"#F2EDE3" },
+  { id:10, name:"Rattan tote bag", category:"accessories", material:"", price:185, tag:"Bestseller", desc:"Handwoven rattan with leather handles.", color:"#E8DFD0" },
+  { id:11, name:"Cotton shirt dress", category:"dresses", material:"cotton", price:385, tag:"", desc:"Classic shirt-style, belted waist. Versatile.", color:"#D9CCBA" },
+  { id:12, name:"Linen scarf", category:"accessories", material:"linen", price:129, tag:"", desc:"Oversized, naturally dyed. Multi-wear.", color:"#BFB09A" },
+];
+
+let activeCategory = 'all';
+let currentSort = 'default';
+
+function garmentIcon(cat) {
+  const icons = {
+    tops: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9E8E76" stroke-width="1.5"><path d="M8 14 L16 8 L20 12 C20 12 22 14 24 14 C26 14 28 12 28 12 L32 8 L40 14 L36 20 L32 18 L32 40 L16 40 L16 18 L12 20 Z"/></svg>`,
+    dresses: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9E8E76" stroke-width="1.5"><path d="M18 8 L24 12 L30 8 L36 16 L30 20 L32 42 L16 42 L18 20 L12 16 Z"/></svg>`,
+    bottoms: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9E8E76" stroke-width="1.5"><path d="M10 10 L38 10 L34 42 L24 32 L14 42 Z"/></svg>`,
+    outerwear: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9E8E76" stroke-width="1.5"><path d="M6 12 L16 8 L20 14 L24 12 L28 14 L32 8 L42 12 L40 22 L34 20 L34 42 L14 42 L14 20 L8 22 Z"/></svg>`,
+    accessories: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="#9E8E76" stroke-width="1.5"><rect x="10" y="18" width="28" height="20" rx="2"/><path d="M18 18 C18 12 30 12 30 18"/></svg>`,
+  };
+  return icons[cat] || icons['accessories'];
+}
+
+function renderProducts(list) {
+  const grid = document.getElementById('productGrid');
+  grid.innerHTML = '';
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="no-results">No products found. Try adjusting your filters.</div>';
+    document.getElementById('gridCount').textContent = '0 pieces';
+    return;
+  }
+  document.getElementById('gridCount').textContent = list.length + (list.length === 1 ? ' piece' : ' pieces');
+  list.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-img" style="background:${p.color}">
+        <div class="product-img-placeholder">${garmentIcon(p.category)}</div>
+        ${p.tag ? `<span class="product-tag">${p.tag}</span>` : ''}
+      </div>
+      <div class="product-info">
+        <p class="product-category">${p.category}</p>
+        <p class="product-name">${p.name}</p>
+        <p class="product-desc">${p.desc}</p>
+        <div class="product-footer">
+          <span class="product-price">MYR ${p.price.toLocaleString()}</span>
+          <button class="inquire-btn" onclick="openInquiry('${p.name}')">Enquire</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function getFiltered() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const maxPrice = parseInt(document.getElementById('priceRange').value);
+  const checkedMats = Array.from(document.querySelectorAll('.filter-label input:checked')).map(el => el.value);
+  return products.filter(p => {
+    if (activeCategory !== 'all' && p.category !== activeCategory) return false;
+    if (p.price > maxPrice) return false;
+    if (checkedMats.length > 0 && !checkedMats.includes(p.material)) return false;
+    if (search && !p.name.toLowerCase().includes(search) && !p.desc.toLowerCase().includes(search)) return false;
+    return true;
+  });
+}
+
+function getSorted(list) {
+  const s = [...list];
+  if (currentSort === 'price-asc') s.sort((a,b) => a.price - b.price);
+  else if (currentSort === 'price-desc') s.sort((a,b) => b.price - a.price);
+  else if (currentSort === 'name') s.sort((a,b) => a.name.localeCompare(b.name));
+  return s;
+}
+
+function filterProducts() { renderProducts(getSorted(getFiltered())); }
+function sortProducts(val) { currentSort = val; filterProducts(); }
+function setCategory(cat, btn) {
+  activeCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterProducts();
+}
+function updatePrice(val) {
+  document.getElementById('priceDisplay').textContent = 'MYR ' + parseInt(val).toLocaleString();
+}
+
+function openInquiry(productName) {
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalProduct').value = productName || '';
+  document.getElementById('modalTitle').textContent = productName ? productName : 'Get in touch';
+}
+function closeInquiry() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModal(e) { if (e.target === document.getElementById('modalOverlay')) closeInquiry(); }
+function submitInquiry() {
+  alert('Thank you! We will get back to you within 1–2 business days.');
+  closeInquiry();
+}
+
+renderProducts(products);
+</script>
+</body>
+</html>
